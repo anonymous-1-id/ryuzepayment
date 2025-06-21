@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pembayaran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .lightning {
+      position: absolute;
+      width: 2px;
+      height: 100px;
+      background: white;
+      opacity: 0;
+      z-index: 2;
+      transform: rotateZ(20deg);
+      box-shadow: 0 0 10px white, 0 0 20px white;
+      animation: none;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0; }
+      5% { opacity: 1; transform: scaleY(1.2) rotateZ(20deg); }
+      10% { opacity: 0; transform: scaleY(1) rotateZ(20deg); }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen overflow-hidden text-white font-sans">
+
+  <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+    <source src="https://files.catbox.moe/cy1bns.mp4" type="video/mp4" />
+    Browser tidak mendukung video.
+  </video>
+
+  <!-- OVERLAY GELAP -->
+  <div class="absolute inset-0 bg-black/60 z-[1]"></div>
+
+  <!-- EFEK PETIR -->
+  <div id="lightning-container" class="absolute inset-0 z-[2]"></div>
+
+  <!-- KONTEN -->
+  <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl p-6 space-y-6">
+
+      <!-- ADMIN MENU -->
+      <div class="text-center">
+        <h2 class="text-xl font-semibold text-white mb-4">👨‍💻 Admin Kontak</h2>
+        <div class="grid gap-3">
+          <a href="https://wa.me/6283198010441" target="_blank" class="flex items-center gap-3 bg-black/70 hover:bg-black/90 rounded-xl p-4 shadow-lg transition">
+            <div class="text-green-400 text-2xl">📱</div>
+            <div class="flex-1 text-white">
+              <p class="font-bold text-sm">ADMIN¹</p>
+              <p class="text-xs text-white/80">6283198010441 / Ryuze</p>
+            </div>
+            <span class="text-white/60 text-sm">WA</span>
+          </a>
+          <a href="https://wa.me/6283198010454" target="_blank" class="flex items-center gap-3 bg-black/70 hover:bg-black/90 rounded-xl p-4 shadow-lg transition">
+            <div class="text-green-400 text-2xl">📱</div>
+            <div class="flex-1 text-white">
+              <p class="font-bold text-sm">ADMIN²</p>
+              <p class="text-xs text-white/80">6283198010454 / Arga</p>
+            </div>
+            <span class="text-white/60 text-sm">WA</span>
+          </a>
+          <a href="https://wa.me/6283838833324" target="_blank" class="flex items-center gap-3 bg-black/70 hover:bg-black/90 rounded-xl p-4 shadow-lg transition">
+            <div class="text-green-400 text-2xl">📱</div>
+            <div class="flex-1 text-white">
+              <p class="font-bold text-sm">ADMIN³</p>
+              <p class="text-xs text-white/80">6283838833324 / Ray</p>
+            </div>
+            <span class="text-white/60 text-sm">WA</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- METODE PEMBAYARAN -->
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-white drop-shadow">💳 Metode Pembayaran</h1>
+        <p class="text-sm text-gray-300">Klik untuk menyalin nomor tujuan</p>
+      </div>
+
+      <div class="space-y-3">
+        <!-- DANA -->
+        <div onclick="copyToClipboard('083838833324', '📱 DANA')" class="cursor-pointer bg-black/70 hover:bg-black/90 p-4 rounded-xl shadow-md hover:scale-105 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://images.seeklogo.com/logo-png/39/1/dana-e-wallet-app-logo-png_seeklogo-399948.png" alt="DANA" class="w-6 h-6" />
+            <div class="flex-1">
+              <p class="font-bold text-white text-sm">DANA</p>
+              <p class="text-xs text-white/80">a.n Ryuze</p>
+            </div>
+            <span class="text-white/60 text-xs">Klik untuk salin</span>
+          </div>
+        </div>
+
+        <!-- GoPay -->
+        <div onclick="copyToClipboard('083838833324', '💸 GoPay')" class="cursor-pointer bg-black/70 hover:bg-black/90 p-4 rounded-xl shadow-md hover:scale-105 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://logowik.com/content/uploads/images/gopay7196.jpg" alt="GoPay" class="w-6 h-6 rounded" />
+            <div class="flex-1">
+              <p class="font-bold text-white text-sm">GoPay</p>
+              <p class="text-xs text-white/80">a.n Ryuze</p>
+            </div>
+            <span class="text-white/60 text-xs">Klik untuk salin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-black text-sm px-4 py-2 rounded shadow-md hidden z-50">
+    Nomor disalin: <span id="copiedNumber" class="font-bold"></span>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    function copyToClipboard(text, label) {
+      const el = document.createElement("textarea");
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      showToast(label + " - " + text);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      const copiedNumber = document.getElementById("copiedNumber");
+      copiedNumber.innerText = message;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 2500);
+    }
+
+    function createLightning() {
+      const lightning = document.createElement("div");
+      lightning.className = "lightning";
+      lightning.style.left = `${Math.random() * window.innerWidth * 0.9}px`;
+      lightning.style.top = `${Math.random() * window.innerHeight * 0.4}px`;
+      lightning.style.height = `${100 + Math.random() * 150}px`;
+      document.getElementById("lightning-container").appendChild(lightning);
+      lightning.style.animation = "flash 0.6s ease-out";
+      setTimeout(() => lightning.remove(), 700);
+    }
+
+    setInterval(() => createLightning(), Math.random() * 3000 + 3000);
+  </script>
+</body>
+</html>
